@@ -2,9 +2,12 @@
 // run app: node server.js
 
 // PACKAGES //
-var path = require('path');
+var path = require('path'); 
 var fs = require('fs');
 var express = require('express');
+
+// IMPORT ROUTES //
+var indexRoutes = require('./routes/index.js');
 
 // CREATE ENGINE //
 var app = express();
@@ -16,12 +19,11 @@ app.engine('html', (path, options, callback)=>{
 });
 
 // MIDDLEWARE //
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, '../client')));
 
-// ROUTES // 
-app.get('/', (req, res)=>{
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+// ROUTES //
+app.use ('/', indexRoutes);
+
 
 // ERROR HANDLE //
 app.use(function(err, req, res, next){
@@ -29,4 +31,5 @@ app.use(function(err, req, res, next){
 });
 
 
-app.listen(8000, ()=>{ console.log('running on port 8000')});
+// SERVE APP //
+module.exports = app;
